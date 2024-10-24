@@ -13,14 +13,15 @@ Vagrant.configure("2") do |config|
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
   config.vm.box = "ubuntu/focal64"
+  # config.vm.network "forwarded_port", guest: 80, host: 8088
   config.vm.hostname = "testserver"
-  config.vm.network  "forwarded_port",
-    id: 'ssh', quest: 22, host: 2202, host_ip: "127.0.0.1",
+  config.vm.network "forwarded_port",
+    id: 'ssh', guest: 22, host: 2202, host_ip: "127.0.0.1",
 auto_correct: false
   config.vm.network "forwarded_port",
-    id: 'http', guest: 22, host: 2202, host_ip: "127.0.0.1"
+    id: 'http', guest: 80, host: 8088, host_ip: "127.0.0.1"
   config.vm.network "forwarded_port",
-    id 'https', guest: 443, host: 8443, host_ip: "127.0.0.1"
+    id: 'https', guest: 443, host: 8453, host_ip: "127.0.0.1"
   # disable updating guest additions
   if Vagrant.has_plugin?("vagrant-vbguest")
     config.vbguest.auto_update = false

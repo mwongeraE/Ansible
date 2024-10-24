@@ -1,0 +1,31 @@
+- name: Configure webserver with nginx
+  hosts: webservers
+  become: True
+  tasks:
+    - name: Install nginx
+      package: 
+        name: nginx 
+        update_cache: yes
+    - name: Copy nginx config file
+      copy:
+        src: nginx.conf
+        dest: "{{ conf_file }}"
+    - name: Enable configuration
+      file: 
+        dest: /etc/nginx/sites-enabled/default
+        src: "{{ conf_file }}"
+        state: link
+    - name: Copy index.html
+      template: 
+        src: index.html.j2
+        dest: /usr/share/nginx/html/index.html
+    - name: Restart nginx
+      service: 
+        name: nginx 
+        state: restarted
+  vars:
+    tls_dir: /etc/nginx/ssl/
+    key_file: nginx.key
+    cert_file: nginx.crt
+    conf_file: /etc/nginx/sites-available/default
+    server_name: localhost
