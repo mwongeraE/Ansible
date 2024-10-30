@@ -5,29 +5,52 @@
 # configures the configuration version (we support older styles for
 # backwards compatibility). Please don't change it unless you know what
 # you're doing.
-Vagrant.configure("2") do |config|
+VAGRANTFILE_API_VERSION = "2"
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # The most common configuration options are documented and commented below.
   # For a complete reference, please see the online documentation at
   # https://docs.vagrantup.com.
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
-  config.vm.box = "ubuntu/focal64"
-  # config.vm.network "forwarded_port", guest: 80, host: 8088
-  config.vm.hostname = "testserver"
-  config.vm.network "forwarded_port",
-    id: 'ssh', guest: 22, host: 2202, host_ip: "127.0.0.1",
-auto_correct: false
-  config.vm.network "forwarded_port",
-    id: 'http', guest: 80, host: 8088, host_ip: "127.0.0.1"
-  config.vm.network "forwarded_port",
-    id: 'https', guest: 443, host: 8453, host_ip: "127.0.0.1"
-  # disable updating guest additions
-  if Vagrant.has_plugin?("vagrant-vbguest")
-    config.vbguest.auto_update = false
+#   config.vm.box = "ubuntu/focal64"
+#   # config.vm.network "forwarded_port", guest: 80, host: 8088
+#   config.vm.hostname = "testserver"
+#   config.vm.network "forwarded_port",
+#     id: 'ssh', guest: 22, host: 2202, host_ip: "127.0.0.1",
+# auto_correct: false
+#   config.vm.network "forwarded_port",
+#     id: 'http', guest: 80, host: 8088, host_ip: "127.0.0.1"
+#   config.vm.network "forwarded_port",
+#     id: 'https', guest: 443, host: 8453, host_ip: "127.0.0.1"
+#   # disable updating guest additions
+#   if Vagrant.has_plugin?("vagrant-vbguest")
+#     config.vbguest.auto_update = false
+#   end
+#     config.vm.provider "virtualbox" do |virtualbox|
+#       virtualbox.name = "ch02"
+#   end
+
+  # Use the same key for each machine
+  config.ssh.insert_key = false
+
+  config.vm.define "vagrant1" do |vagrant1|
+    vagrant1.vm.box = "ubuntu/focal64"
+    vagrant1.vm.hostname = "vagrant1"
+    vagrant1.vm.network "forwarded_port", guest: 80, host: 8083
+    vagrant1.vm.network "forwarded_port", guest: 443, host: 8446
   end
-    config.vm.provider "virtualbox" do |virtualbox|
-      virtualbox.name = "ch02"
+  config.vm.define "vagrant2" do |vagrant2|
+    vagrant2.vm.box = "ubuntu/focal64"
+    vagrant2.vm.hostname = "vagrant2"
+    vagrant2.vm.network "forwarded_port", guest: 80, host: 8084
+    vagrant2.vm.network "forwarded_port", guest: 443, host: 8444
+  end
+  config.vm.define "vagrant3" do |vagrant3|
+    vagrant3.vm.box = "ubuntu/focal64"
+    vagrant3.vm.hostname = "vagrant3"
+    vagrant3.vm.network "forwarded_port", guest: 80, host: 8085
+    vagrant3.vm.network "forwarded_port", guest: 443, host: 8445
   end
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
